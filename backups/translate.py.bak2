@@ -1,0 +1,19 @@
+from deep_translator import GoogleTranslator
+import sys
+
+def translate(text, target_language):
+    translator = GoogleTranslator(target=target_language)
+    try:
+        translation = translator.translate(text)
+        return translation
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Usage: translate.py '<text>' <target_language>")
+        sys.exit(1)
+    text = sys.argv[1]
+    target_language = sys.argv[2]
+    translation = translate(text, target_language)
+    print(translation)

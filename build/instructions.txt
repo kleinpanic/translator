@@ -1,0 +1,1 @@
+sudo cp translate /usr/local/bin
