@@ -4,7 +4,7 @@
 confirm_uninstall() {
     echo "Are you sure you want to uninstall the translate program?"
     echo "This will remove the virtual environment and all installed files."
-    read -p "Type 'yes' to proceed: " confirmation
+    read -r -p "Type 'yes' to proceed: " confirmation
 
     if [ "$confirmation" != "yes" ]; then
         echo "Uninstallation canceled."
@@ -35,9 +35,9 @@ system_wide_uninstall() {
     echo "Starting system-wide uninstallation..."
 
     # Remove the system-wide virtual environment
-    if [ -d "$VENV_DIR" ]; then
+    if [ -d "$SYS_VENV_DIR" ]; then
         echo "Removing system-wide virtual environment..."
-        sudo rm -rf "$VENV_DIR"
+        sudo rm -rf "$SYS_VENV_DIR"
     fi
 
     # Remove the source code directory
@@ -47,9 +47,9 @@ system_wide_uninstall() {
     fi
 
     # Remove the translate executable from /usr/local/bin
-    if [ -f "/usr/local/bin/translate" ]; then
+    if [ -f "$BIN_FILE" ]; then
         echo "Removing translate executable..."
-        sudo rm /usr/local/bin/translate
+        sudo rm "$BIN_FILE"
     fi
 
     echo "System-wide uninstallation complete."
@@ -58,13 +58,16 @@ system_wide_uninstall() {
 # Main uninstallation logic
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 VENV_DIR="$DIR/../venv"
-SRC_DIR="/usr/local/share/translator/src"
+# Overridable so the script can be exercised in tests without touching /.
+SYS_VENV_DIR="${TRANSLATOR_SYS_VENV_DIR:-/lib/python-venvs/translator-env}"
+SRC_DIR="${TRANSLATOR_SRC_DIR:-/usr/local/share/translator/src}"
+BIN_FILE="${TRANSLATOR_BIN_FILE:-/usr/local/bin/translate}"
 
 # Confirm uninstallation
 confirm_uninstall
 
 # Determine installation type (local or system-wide) based on the presence of /usr/local/bin/translate
-if [ -f "/usr/local/bin/translate" ]; then
+if [ -f "$BIN_FILE" ]; then
     system_wide_uninstall
 else
     local_uninstall

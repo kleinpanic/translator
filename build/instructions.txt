@@ -1,1 +1,2 @@
-sudo cp translate /usr/local/bin
+See README.md in the repository root for install and usage instructions.
+Run ./build/install.sh and choose local or system-wide installation.

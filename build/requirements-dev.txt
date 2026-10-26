@@ -1,0 +1,5 @@
+-r requirements.txt
+pytest==8.3.3
+ruff==0.6.9
+shellcheck-py==0.10.0.1
+pip-audit==2.7.3
