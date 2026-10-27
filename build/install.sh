@@ -25,7 +25,7 @@ choose_install_type() {
     echo "0) Cancel"
     echo "1) Locally (current user)"
     echo "2) System-wide (requires sudo)"
-    read -p "Choose an option [0/1/2]: " install_option
+    read -r -p "Choose an option [0/1/2]: " install_option
 
     # Check if the input is valid
     if [[ -z "$install_option" || ! "$install_option" =~ ^[012]$ ]]; then
@@ -39,14 +39,13 @@ choose_install_type() {
         exit 0
     fi
 
-    return $install_option
+    return "$install_option"
 }
 
 # Function for local installation
 local_install() {
     echo "Starting local installation..."
     VENV_DIR="$DIR/../venv"
-    SRC_FILE="$DIR/../src/translate.py"
 
     # Check if the virtual environment exists, if not, create it
     if [ ! -d "$VENV_DIR" ]; then
@@ -61,7 +60,7 @@ local_install() {
     # Make the wrapper script executable
     chmod +x "$DIR/translate.sh"
 
-    echo "Local install complete. Manually run the startup script using ./translate.sh"
+    echo "Local install complete. Run the translator with: $DIR/translate.sh"
 }
 
 # Function for system-wide installation
